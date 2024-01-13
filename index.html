@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interval Timer</title>
     <style>
+    #audioPlayer {
+       display: none; 
+    }
+
     body {
         font-family: "Arial", sans-serif;
         text-align: center;
@@ -34,16 +38,21 @@
 <div id="controls">
 <hr>
 <div>
-    <h4> Work Duration </h4>
-    <input name="Work Duration" type="text" id="workDuration"/>
-    <h4> Rest Duration </h4>
-    <input name="Rest Duration" type="text" id="restDuration"/>
+    <h4> Work Duration (mins)</h4>
+    <input type="text" id="workDuration"/>
+    <h4> Rest Duration (mins)</h4>
+    <input type="text" id="restDuration"/>
 </div>
 <hr>
 <button onclick="startTimer()">Start</button>
 <button onclick="pauseTimer()">Pause</button>
 <button onclick="resetTimer()">Reset</button>
 </div>
+<audio id="audioPlayer" controls>
+   <source src="./bell.mp3" type="audio/mp3">
+   Your browser does not support the audio tag.
+</audio>
+
 
 <script>
     let timer;
@@ -53,11 +62,13 @@
     let workDuration = 30; 
     let restDuration = 10; 
 
+    const audioPlayer = document.getElementById("audioPlayer");
+
     function startTimer() {
         if (!timer) {
             document.getElementById("status").innerText = "WORKING";
-            workDuration = Number(document.getElementById("workDuration").value);
-            restDuration = Number(document.getElementById("restDuration").value);
+            workDuration = Number(document.getElementById("workDuration").value)*60;
+            restDuration = Number(document.getElementById("restDuration").value)*60;
             isPaused = false;
             timer = setInterval(updateTimer, 1000);
         }
@@ -88,9 +99,11 @@
 
                 if (rounds % 2 === 1) {
                     document.getElementById("status").innerText = "RESTING";
+                    playAudio();
                     alert('Rest Interval!'); 
                 } else {
                     document.getElementById("status").innerText = "WORKING";
+                    playAudio();
                     alert('Work Interval!'); 
                 }
             }
@@ -101,6 +114,11 @@
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
         document.getElementById('timer').innerText = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    }
+
+
+    function playAudio() {
+       audioPlayer.play();
     }
 </script>
 
